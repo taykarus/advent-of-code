@@ -1,63 +1,61 @@
 from aoc.utils import *
 
+REPORT_VALID_START = 1
+REPORT_VALID_END = 3
 
-def get_int_lists_from_file():
+
+def split_int_from_file():
     lines = file_read_lines(FILE)
-    return [[int(l) for l in line.split()] for line in lines]
+    return [split_int(line) for line in lines]
 
 
-def is_between(value, start, end):
-    return start <= value <= end
+def calculate_pair_diff_by_index(levels, i):
+    return levels[i] - levels[i-1]
 
 
-def is_all_increasing_or_decreasing(diff1, diff2):
-    return (diff1 < 0 and diff2 < 0) or (diff1 > 0 and diff2 > 0)
+def is_diff_valid(diff):
+    if diff == 0:
+        return False
+    return REPORT_VALID_START <= abs(diff) <= REPORT_VALID_END
 
 
-def is_level_differ_valid(diff1, diff2, start, end):
-    return is_between(abs(diff1), start, end) and is_between(abs(diff2), start, end)
-
-
-def is_secure_list(l, check_sublist=False, index=0, original_list=None):
+def is_secure_list(levels, check_sublist=False, index=0, original_list=None):
     if original_list is None:
-        original_list = l
+        original_list = levels
 
     if index > len(original_list):
         return False
 
     valid = True
-    for i in range(2, len(l)):
-        diff1 = l[i - 1] - l[i]
-        diff2 = l[i - 2] - l[i - 1]
-        if (not is_all_increasing_or_decreasing(diff1, diff2) or
-                not is_level_differ_valid(diff1, diff2, 1, 3)):
+    is_list_increasing = None
+    for i in range(1, len(levels)):
+        diff = calculate_pair_diff_by_index(levels, i)
+
+        is_pair_increasing = diff > 0
+        if is_list_increasing is None:
+            is_list_increasing = is_pair_increasing
+
+        if not is_diff_valid(diff) or is_pair_increasing != is_list_increasing:
             valid = False
             break
-    if check_sublist:
-        sublist = original_list[:index] + original_list[index+1:]
-        return valid or is_secure_list(sublist, True, index+1, original_list)
-    else:
-        return valid
+
+    if valid:
+        return True
+    elif check_sublist:
+        sublist = original_list[:index] + original_list[index + 1:]
+        return is_secure_list(sublist, True, index + 1, original_list)
+
+    return False
 
 
 def part_1():
-    lists = get_int_lists_from_file()
-
-    total = 0
-    for l in lists:
-        if is_secure_list(l):
-            total += 1
-    return total
+    lines = split_int_from_file()
+    return sum([is_secure_list(line) for line in lines])
 
 
 def part_2():
-    lists = get_int_lists_from_file()
-
-    total = 0
-    for l in lists:
-        if is_secure_list(l, check_sublist=True):
-            total += 1
-    return total
+    lines = split_int_from_file()
+    return sum([is_secure_list(line, check_sublist=True) for line in lines])
 
 
 print('Part 1: ', part_1())

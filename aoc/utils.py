@@ -7,4 +7,5 @@ def file_read_lines(filename):
         return f.readlines()
 
 
-frl = _frl = file_read_lines
+def split_int(line):
+    return [int(level) for level in line.split()]
