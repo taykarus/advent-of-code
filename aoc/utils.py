@@ -17,5 +17,5 @@ def clean_list(dirty_list):
     return [element for element in dirty_list if element]
 
 
-def split_int(line):
-    return [int(level) for level in line.split()]
+def split_int(line, separator=None):
+    return [int(level) for level in line.split(separator)]
