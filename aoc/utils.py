@@ -1,6 +1,7 @@
 FILE = 'input.txt'
 FILE_EXAMPLE = 'example.txt'
 FILE_EXAMPLE2 = 'example2.txt'
+FILE_EXAMPLE3 = 'example3.txt'
 
 
 def file_read(filename):
@@ -11,6 +12,11 @@ def file_read(filename):
 def file_read_lines(filename):
     with open(filename) as f:
         return f.readlines()
+
+
+def file_read_splitlines(filename):
+    with open(filename) as f:
+        return f.read().splitlines()
 
 
 def clean_list(dirty_list):
