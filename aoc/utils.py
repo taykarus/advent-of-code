@@ -25,3 +25,19 @@ def clean_list(dirty_list):
 
 def split_int(line, separator=None):
     return [int(level) for level in line.split(separator)]
+
+
+def measure_time(func, *args, **kwargs):
+    from time import time
+    start_time = time()
+    result = func(*args, **kwargs)
+    elapsed_time = time() - start_time
+    return result, elapsed_time
+
+
+def is_even(number):
+    return number % 2 == 0
+
+
+def is_odd(number):
+    return number % 2 == 1
