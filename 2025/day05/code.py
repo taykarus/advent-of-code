@@ -1,4 +1,3 @@
-from copy import deepcopy
 from aoc.utils import *
 
 CURRENT_FILE = FILE
